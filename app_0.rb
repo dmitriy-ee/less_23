@@ -3,7 +3,12 @@ require 'sinatra'
 require 'sinatra/reloader'
 
 get '/' do
+	@error = 'Something wrong!!!'
 	erb :layout
+end
+
+get '/login/form' do
+	erb :login_form
 end
 
 post '/' do
@@ -22,9 +27,22 @@ post '/visit' do
 	@datetime = params[:datetime]
 	@bb_bitch = params[:bb_bitch]
 
+	hh =    {
+			:username => 'Please, enter your name',
+			:phone => 'Please, enter your phone', 
+			:datetime => 'Please, enter visit day & time'
+			} 
+	hh.each do |key, value|
+		if params[key] == ''
+			@error = hh[key]
+		return erb :visit
+		end
+	end
+
 	erb "Information recive!\n 
 	Username: #{@username}\n 
 	Phone: #{@phone}\n 
 	Datetime: #{@datetime}\n 
 	Barberbitch: #{@bb_bitch}\n"
 end
+
